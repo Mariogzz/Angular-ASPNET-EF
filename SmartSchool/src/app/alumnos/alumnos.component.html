@@ -1,0 +1,77 @@
+<div class="row">    
+    <div class="col-sm-6" *ngIf="alumnoSeleccionado">          
+        <app-titulo [titulo]="(alumnoSeleccionado.id == undefined ? 'Nuevo Alumno' : 'Id: ' +  alumnoSeleccionado.id)">
+            <div class="mt-1">
+                <button class="btn btn-danger btn-sm" (click)="regresar()">
+                    Cerrar
+                </button>
+            </div>
+        </app-titulo>
+        <form [formGroup]="alumnoForm" (submit)="alumnoSubmit()">
+            <div class="form-group">
+                <label for="formGroupExampleInput">Nombre</label>
+                <input type="text" formControlName="nombre" class="form-control" id="formGroupExampleInput">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Apellido</label>
+                <input type="text" formControlName="apellido" class="form-control" id="formGroupExampleInput2">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Matricula</label>
+                <input type="text" formControlName="matricula" class="form-control" id="formGroupExampleInput2">
+            </div>
+            <div>
+                <div class="form-group">
+                    <hr>
+                    <button class="btn btn-success" [disabled]="!alumnoForm.valid">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div [ngClass]="{'col-sm-6': alumnoSeleccionado, 'col-sm-12': !alumnoSeleccionado}" >
+        <app-titulo [titulo]="titulo">
+            <button class="btn btn-success" (click)="alumnoNuevo()">
+                Registrar Alumno
+            </button>
+        </app-titulo>
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Visualizar</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Matricula</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let alumno of alumnos">
+                    <td><button (click)="alumnoSelect(alumno)" class="btn btn-sm btn-warning">Detalles</button></td>
+                    <td scope="row">{{alumno.id}}</td>
+                    <td>{{alumno.nombre}}</td>
+                    <td>{{alumno.apellido}}</td>
+                    <td>{{alumno.matricula}}</td>
+                    <td>
+                        <div class="btn-group">                            
+                            <button (click)="openModal(template)" class="btn btn-sm btn-primary">Profesores</button>
+                            <button class="btn btn-sm btn-danger" (click)="eliminarAlumno(alumno.id)">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+<ng-template #template>
+    <div class="modal-body">
+        <app-profesores></app-profesores>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn pull-right" aria-label="Close" (click)="modalRef.hide()">
+            Cerrar
+        </button>
+    </div>
+</ng-template>
